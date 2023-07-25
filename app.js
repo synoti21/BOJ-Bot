@@ -24,9 +24,9 @@ client.on('messageCreate', async (message) => {
     console.log(message.content);
     if (message.content === "안녕"){
         message.reply({embeds:[new EmbedBuilder().setTitle("안녕").setDescription("나를 소개하지").addFields([{name:"이름은 디코봇", value:"직업은 Traveler"}])]})
-    }else if (message.content == "뭐해"){
+    }else if (message.content === "뭐해"){
         message.reply("너에게 닿는 중")
-    }else if (message.content == "잘가"){
+    }else if (message.content === "잘가"){
         message.reply("다신 보지 말자")
     }
 })
