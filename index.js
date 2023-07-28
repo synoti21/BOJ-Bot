@@ -14,6 +14,8 @@ module.exports = client;
 
 client.login(process.env.DISCORD_TOKEN);
 
+require('./bot/message')
+
 client.once('ready', async () => {
     console.log("BOJ Bot is ready")
 })
