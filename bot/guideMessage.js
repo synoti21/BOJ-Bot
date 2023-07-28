@@ -9,6 +9,8 @@ const embedWelcome = new EmbedBuilder()
         { name: '!random', value: '클릭 시 백준에서 랜덤하게 문제를 추천해드립니다.', inline: false },
         { name: '!streak', value: '매일 문제를 풀지 않았을 경우, 알림을 보내드립니다.', inline: false },
         { name: '!daily', value: '일일 맞춤형 문제를 추천 드립니다.', inline: false },
+        { name: '!help', value: '백준 봇 명령어를 알려드립니다.', inline: false },
+
     )
     .setTimestamp()
 

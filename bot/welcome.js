@@ -1,5 +1,5 @@
 const client = require("../index")
-const welcomeMessage = require("./help")
+const guideMessage = require("./guideMessage")
 
 const config = require("../config.json")
 client.on("guildCreate", async(guild) => {
@@ -8,7 +8,7 @@ client.on("guildCreate", async(guild) => {
         console.log(":(")
         return
     }
-    channel.send({embeds: [welcomeMessage]});
+    channel.send({embeds: [guideMessage]});
 })
 
 
