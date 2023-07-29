@@ -2,24 +2,26 @@ const {EmbedBuilder} = require('discord.js')
 const axios = require('axios')
 const {bojProblem} = require("../models/problem");
 
-async function getRandomProblem() {
-    let errorStatus = false;
-    const randomId = Math.floor(Math.random() * (28400 - 1000)) + 1000;
-    const response = await axios.get('https://solved.ac/api/v3/problem/show', {
-        params: {
-            problemId: randomId,
-        },
-    }).catch(error =>{
-        errorStatus = true;
-        console.log(error)
-    });
-
-    if (!errorStatus) {
-        return new bojProblem(response.data.problemId, response.data.titleKo, response.data.level, response.data.tags);
+async function getRandomProblem(attempts = 0) {
+    if (attempts >= 5) {
+        return new bojProblem(-1, "알 수 없는 오류가 발생했습니다.", 0, [])
     }
-    return new bojProblem(-1, "알 수 없는 오류가 발생했습니다.", 0, [])
+    const randomId = Math.floor(Math.random() * (28415 - 1000)) + 1000;
+    try {
+        const response = await axios.get('https://solved.ac/api/v3/problem/show', {
+            params: {
+                problemId: randomId,
+            },
+        });
+        return new bojProblem(response.data.problemId, response.data.titleKo, response.data.level, response.data.tags);
 
+    } catch (error) {
+        console.error(error.response.data);
+        console.error("Retrying...")
+        return await getRandomProblem(attempts + 1);
+    }
 }
+
 
 module.exports = {
     name: '문제 랜덤 추천',
