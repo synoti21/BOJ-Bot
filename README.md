@@ -1,4 +1,5 @@
 # BOJ_Bot_Backend
+<img width="717" alt="스크린샷 2023-07-29 오후 3 15 18" src="https://github.com/synoti21/BOJ_Bot_Backend/assets/58936172/a5352f63-7f78-4f8e-a039-43d595dc7b10">
 
 Prototype of BOJ Bot.
 - Random Recommendation of BOJ problems via discord chat
