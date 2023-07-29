@@ -3,17 +3,22 @@ const axios = require('axios')
 const {bojProblem} = require("../models/problem");
 
 async function getRandomProblem() {
+    let errorStatus = false;
     const randomId = Math.floor(Math.random() * (28400 - 1000)) + 1000;
     const response = await axios.get('https://solved.ac/api/v3/problem/show', {
         params: {
             problemId: randomId,
         },
+    }).catch(error =>{
+        errorStatus = true;
+        console.log(error)
     });
-    if (response.data.problemId && response.data.titleKo) {
+
+    if (!errorStatus) {
         return new bojProblem(response.data.problemId, response.data.titleKo, response.data.level, response.data.tags);
     }
+    return new bojProblem(-1, "알 수 없는 오류가 발생했습니다.", 0, [])
 
-    return getRandomProblem();
 }
 
 module.exports = {
