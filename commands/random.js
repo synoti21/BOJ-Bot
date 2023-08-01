@@ -25,7 +25,7 @@ async function getRandomProblem(attempts = 0) {
 
 module.exports = {
     name: '문제 랜덤 추천',
-    async execute(message, args) {
+    async execute(message, userCommandStatus, args) {
         const randProblem = await getRandomProblem();
         console.log(randProblem.problemId)
         console.log(randProblem.title)

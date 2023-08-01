@@ -42,8 +42,14 @@ for (const file of commands) {
     client.commands.set(commandName, command);
 }
 
+const userCommandStatus = {}
 client.on('messageCreate', message => {
     if (message.author.bot || !message.guild) return;
+
+    if (userCommandStatus[message.author.id] && message.content.startsWith('!')){
+        message.reply('현재 다른 명령어를 실행중입니다.')
+        return;
+    }
 
     const args = message.content.slice(1).split(/ +/);
     const command = args.shift().toLowerCase();
@@ -55,7 +61,7 @@ client.on('messageCreate', message => {
 
     try {
         console.log(command)
-        client.commands.get(command).execute(message, args);
+        client.commands.get(command).execute(message, userCommandStatus, args);
     } catch (error) {
         console.error(error);
         message.reply('명령을 실행하는 동안 오류가 발생했습니다.');
