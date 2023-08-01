@@ -6,7 +6,7 @@ This is a prototype of BOJ Bot with following features.
 - Daily notification with a single random BOJ problem
 - Streak Guard
 
-Will be further developed in;to "Baekjoon Bot" with BOAZ members.
+Will be further developed into "Baekjoon Bot" with BOAZ members.
 
 ## Getting Started
 ### Adding the bot to your server
