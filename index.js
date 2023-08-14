@@ -1,6 +1,8 @@
-const dotenv = require("dotenv");
 const {Client, GatewayIntentBits, Collection} = require('discord.js')
 const fs = require('fs');
+const { sendRandomMessage } = require('./bot/cron')
+const cron = require("node-cron");
+
 
 const client = new Client({
     intents: [
@@ -12,15 +14,12 @@ const client = new Client({
 });
 const config = require("./config.json")
 
-dotenv.config();
 client.config = config;
 client.commands = new Collection();
 
 module.exports = client;
 
 client.login(process.env.DISCORD_TOKEN);
-
-require('./bot/welcome')
 
 client.once('ready', async () => {
     console.log("BOJ Bot is ready")
@@ -71,3 +70,8 @@ client.on('messageCreate', message => {
         message.reply('명령을 실행하는 동안 오류가 발생했습니다.');
     }
 });
+
+cron.schedule('* * * * *', () => sendRandomMessage(client));
+
+
+

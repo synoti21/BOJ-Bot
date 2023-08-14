@@ -1,4 +1,7 @@
 const mysql = require('mysql2/promise');
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const pool = mysql.createPool({
     host: process.env.RDS_ENDPOINT,
@@ -7,6 +10,7 @@ const pool = mysql.createPool({
     database: 'boj_bot_db',
     port: 3306
 });
+
 
 const getConnection = async () => { //Pool 커넥션 불러오기
     try {

@@ -47,5 +47,5 @@ module.exports = {
             )
             .setTimestamp()
         message.channel.send({embeds: [randProblemMsg]})
-    }
+    }, getRandomProblem
 };
