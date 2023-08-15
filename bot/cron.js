@@ -4,6 +4,7 @@ const {EmbedBuilder} = require("discord.js");
 async function sendRandomMessage(client) {
 
     const conn = await getConnection();
+    await conn.beginTransaction()
 
     const currentHour = new Date().getHours();
     const currentMinute = new Date().getMinutes();
@@ -36,17 +37,16 @@ async function sendRandomMessage(client) {
                     { name: '링크', value: `https://www.acmicpc.net/problem/${randProblem.problemId}`,inline: false}
                 )
                 .setTimestamp()
-            client.users.fetch(user.discord_id).then(user => {
-                user.send({embeds: [randProblemMsg]});
-            }).catch(error => {
-                console.error(`메시지를 보낼 수 없습니다: ${error}`);
-            });
+            console.log(user.discord_id)
+
+            const targetUser = await client.users.fetch(user.discord_id)
+            targetUser.send({embeds: [randProblemMsg]})
+            console.log(targetUser)
+            conn.release();
         }
     }catch (error){
         console.log(error);
     }
-
-
 }
 
 module.exports = { sendRandomMessage }

@@ -10,6 +10,7 @@ const client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.DirectMessages
     ],
 });
 const config = require("./config.json")
@@ -64,6 +65,7 @@ client.on('messageCreate', message => {
 
     try {
         console.log(`Entered Command : ${command}`)
+        console.log(message.author.id)
         client.commands.get(command).execute(message, userCommandStatus, args);
     } catch (error) {
         console.error(error);

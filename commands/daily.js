@@ -44,8 +44,8 @@ async function getUserCron(author, message, userCommandStatus){
 
             conn.release();
         } else {
-            conn.release();
             askForTime(message, userCommandStatus, conn, 0);
+            conn.release();
         }
     }catch (error){
         await conn.rollback();
