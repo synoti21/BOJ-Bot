@@ -8,7 +8,11 @@ const pool = mysql.createPool({
     user: process.env.RDS_USER,
     password: process.env.RDS_PASSWORD,
     database: 'boj_bot_db',
-    port: 3306
+    port: 3306,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    connectTimeout: 4500
 });
 
 
