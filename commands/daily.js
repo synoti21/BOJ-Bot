@@ -6,6 +6,9 @@
 // 4. 형식이 잘못되면 오류 메시지 및 "다시 입력해주세요".
 // 5. 쿼리 실행 후 등록
 
+//TODO 등록을 하지 않았을 경우, !daily 명령어 차단시키기
+//TODO 사용자가 시간 입력 할 때, 00 02 처럼 자릿수 맞추도록 파싱해야 함.
+
 const { getConnection } = require('../database/connect');
 
 async function getUserCron(author, message, userCommandStatus){
@@ -75,7 +78,7 @@ function askForTime(message, userCommandStatus, conn, isAltering) {
         if (isCronInserted){
             const [hour, min] = cronMsg.split(' ')
             message.channel.send(`성공적으로 등록되었습니다. 설정한 시간: ${hour}시 ${min}분`)
-        }else{
+        }else{ //TODO 에러 코드로 분류해서 상세 오류 보내기 (잘못된 시간 형식입니다 등)
             message.channel.send("오류가 발생했습니다.")
         }
         //백준 ID를 입력했으면 아이디 콜렉터 종료
