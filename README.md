@@ -40,4 +40,5 @@ For those who prefer using Docker container, follow the instruction:
 docker build -t <image name> .
 docker run -d <image name>
 ```
+I recommend creating .env file before building an image as variables could be reset when restarting a container.
 
