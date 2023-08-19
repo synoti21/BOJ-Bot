@@ -34,6 +34,7 @@ RDS_DB=
 - Type `npm start` to start the bot
 
 For those who prefer using Docker container, follow the instruction:
+- Fill the environment variable in the Dockerfile
 - Build a image and run a container
 ```
 docker build -t <image name> .
