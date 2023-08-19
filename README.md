@@ -23,4 +23,20 @@ npm install
 ```
 - Make your application in the discord developer site
 - Create .env and fill the value with your discord bot token, and AWS RDS info
-- Type `npm run start` to start the bot
+```
+DISCORD_TOKEN=
+RDS_ENDPOINT=
+RDS_USER=
+RDS_PASSWORD=
+RDS_DB=
+```
+- Type `npm test` to test the connection with your RDS
+- Type `npm start` to start the bot
+
+For those who prefer using Docker container, follow the instruction:
+- Build a image and run a container
+```
+docker build -t <image name> .
+docker run -d <image name>
+```
+
