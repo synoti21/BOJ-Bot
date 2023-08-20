@@ -8,14 +8,14 @@ This is a prototype of BOJ Bot with following features.
 
 Will be further developed into "Baekjoon Bot" with BOAZ members.
 
-## Getting Started
-### Adding the bot to your server
+## 🚀 Getting Started
+### 🤖 Adding the bot to your server
 Click the link below and grant permissions for the bot to join your server:
 
 [Add bot to your server](https://discord.com/api/oauth2/authorize?client_id=1133277476869640212&permissions=18432&scope=bot)
 
 
-### Running the server locally
+### 💻 Running the server locally
 Clone this repository and run:
 ```
 git clone https://github.com/synoti21/BOJ_Bot_Backend.git
@@ -33,6 +33,8 @@ RDS_DB=
 - Type `npm test` to test the connection with your RDS
 - Type `npm start` to start the bot
 
+
+### 📦 Using Docker
 For those who prefer using Docker container, follow the instruction:
 - Fill the environment variable in the Dockerfile
 - Build a image and run a container
