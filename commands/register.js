@@ -8,8 +8,6 @@ async function registerId(discordId, bojId) {
 
         console.log("Searching existing ID...")
 
-        //TODO 데이터베이스 구조 변경: 일일 문제 알림 시, (discord_id, boj_id), (discord_id, cron) 으로 분리를 해야 함.
-        //TODO 따라서 이 'registereduser' 이름이 변경되어야 할 수도 있음
         const [rows] = await conn.execute('SELECT boj_id FROM registered_user WHERE discord_id = ?', [discordId]);
         //현재 등록하고자 하는 백준 ID가 이미 있는지 확인
         console.log(`returned rows: ${JSON.stringify(rows, null, 2)}`);

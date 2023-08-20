@@ -6,7 +6,6 @@
 // 4. 형식이 잘못되면 오류 메시지 및 "다시 입력해주세요".
 // 5. 쿼리 실행 후 등록
 
-//TODO 등록을 하지 않았을 경우, !daily 명령어 차단시키기
 //TODO 사용자가 시간 입력 할 때, 00 02 처럼 자릿수 맞추도록 파싱해야 함.
 
 const { getConnection } = require('../database/connect');
@@ -16,6 +15,18 @@ async function getUserCron(author, message, userCommandStatus){
 
     try{
         await conn.beginTransaction()
+
+        console.log("Searching existing ID...")
+
+        const [existingID] = await conn.execute('SELECT boj_id FROM registered_user WHERE discord_id = ?', [author.id]);
+        //현재 등록하고자 하는 백준 ID가 이미 있는지 확인
+        console.log(`returned rows: ${JSON.stringify(existingID, null, 2)}`);
+
+        if (existingID.length < 1) { //이미 있다면
+            message.reply("백준 아이디를 등록하지 않았아요. !register을 통해 아이디를 등록해주세요");
+            return;
+        }
+
 
         const [rows] = await conn.execute('SELECT cron FROM user_cron WHERE discord_id = ?', [author.id])
         console.log(`returned rows: ${JSON.stringify(rows, null, 2)}`);
