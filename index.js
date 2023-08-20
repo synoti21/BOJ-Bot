@@ -26,13 +26,6 @@ client.once('ready', async () => {
     console.log("BOJ Bot is ready")
 })
 
-const events = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
-for (const file of events) {
-    const eventName = file.split(".")[0];
-    const event = require(`./events/${file}`);
-    client.on(eventName, event.bind(null, client));
-}
-
 const commands = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 for (const file of commands) {
     const commandName = file.split(".")[0];
