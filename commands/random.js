@@ -34,18 +34,9 @@ module.exports = {
         console.log(randProblem.title)
         console.log(randProblem.getLevel())
         console.log(randProblem.tags)
-        const randProblemMsg = new EmbedBuilder()
-            .setColor(0x3498DB)
-            .setAuthor({name: 'BOJ Bot'})
-            .setTitle("랜덤 문제 입니다.")
-            .addFields(
-                { name: '문제 번호:', value: `${randProblem.problemId}`, inline: false },
-                { name: '문제:', value: `${randProblem.title}`, inline: false },
-                { name: '난이도:', value: `${randProblem.getLevel()}`, inline: false },
-                { name: '알고리즘 분류:', value: randProblem.tags.length > 0 ? `${randProblem.tags.join(', ')}` : '알고리즘 분류가 되어있지 않습니다.', inline: false },
-                { name: '링크', value: `https://www.acmicpc.net/problem/${randProblem.problemId}`,inline: false}
-            )
-            .setTimestamp()
+
+        const randProblemMsg = randProblem.getEmbedMsg("랜덤 문제입니다.")
+
         message.channel.send({embeds: [randProblemMsg]})
     }, getRandomProblem
 };
