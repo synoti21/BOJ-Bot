@@ -2,8 +2,6 @@ const {Client, GatewayIntentBits, Collection} = require('discord.js')
 const fs = require('fs');
 const { sendRandomMessage } = require('./bot/cron')
 const cron = require("node-cron");
-
-
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -14,6 +12,9 @@ const client = new Client({
     ],
 });
 const config = require("./config.json")
+
+process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() === 'development' ) ? 'development' : 'production';
+
 
 client.config = config;
 client.commands = new Collection();
