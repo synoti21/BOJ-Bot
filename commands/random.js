@@ -5,7 +5,7 @@ const logger = require("../logger")
 
 async function getRandomProblem(attempts = 0) {
     if (attempts >= 5) {
-        logger.error("최대 요청 횟수 (5회) 초과 또는 알 수 없는 오류")
+        logger.warn("최대 요청 횟수 (5회) 초과")
         return new bojProblem(-1, "알 수 없는 오류가 발생했습니다.", 0, [])
     }
     //TODO 현재는 숫자로 범위를 지정해줬는데, 나중에 백준 사이트를 통해 직접 문제 수를 받아야 함.

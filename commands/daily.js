@@ -9,18 +9,18 @@
 //TODO 사용자가 시간 입력 할 때, 00 02 처럼 자릿수 맞추도록 파싱해야 함.
 
 const { getConnection } = require('../database/connect');
+const logger = require("../logger")
 
 async function getUserCron(author, message, userCommandStatus){
     const conn = await getConnection();
 
     try{
         await conn.beginTransaction()
-
-        console.log("Searching existing ID...")
+        logger.verbose("DB Begin Transaction. 이미 존재하는 BOJ ID 탐색")
 
         const [existingID] = await conn.execute('SELECT boj_id FROM registered_user WHERE discord_id = ?', [author.id]);
         //현재 등록하고자 하는 백준 ID가 이미 있는지 확인
-        console.log(`returned rows: ${JSON.stringify(existingID, null, 2)}`);
+        logger.info(`request id: ${author.id} / returned rows: ${JSON.stringify(existingID, null, 2)}`);
 
         if (existingID.length < 1) { //이미 있다면
             message.reply("백준 아이디를 등록하지 않았아요. !register을 통해 아이디를 등록해주세요");
@@ -29,7 +29,7 @@ async function getUserCron(author, message, userCommandStatus){
 
 
         const [rows] = await conn.execute('SELECT cron FROM user_cron WHERE discord_id = ?', [author.id])
-        console.log(`returned rows: ${JSON.stringify(rows, null, 2)}`);
+        logger.info(`request id: ${author.id} / returned rows: ${JSON.stringify(rows, null, 2)}`);
 
         if (rows.length > 0) {
             const [hour, min] = rows[0].cron.split(' ');
@@ -63,7 +63,7 @@ async function getUserCron(author, message, userCommandStatus){
         }
     }catch (error){
         await conn.rollback();
-        console.log(error)
+        logger.error(`Error: ${error} / ${author.id}`)
     }
 
 }
@@ -71,7 +71,6 @@ async function getUserCron(author, message, userCommandStatus){
 
 function askForTime(message, userCommandStatus, conn, isAltering) {
     message.channel.send("원하시는 시간을 24시간제로 다음과 같이 입력해주세요. (HH MM), 취소를 원하실 경우 '취소'를 입력해주세요.");
-    console.log("Asking For time")
 
     const botFilter = m => !m.author.bot && m.author.id === message.author.id && !m.content.startsWith('!');
     const idCollector = message.channel.createMessageCollector({filter: botFilter,max:1, time: 20000});
@@ -79,13 +78,13 @@ function askForTime(message, userCommandStatus, conn, isAltering) {
     idCollector.on('collect', async msg => {
         const cronMsg = msg.content;
         if (cronMsg === '취소'){
-            console.log("Canceled Daily command")
             message.reply("명령을 취소하셨습니다.")
             return;
         }
+
         const isCronInserted = await insertUserCron(message.author.id, cronMsg, conn, isAltering)
 
-        console.log(`Collected Message by ${msg.author.username}: ${msg.content}, ${isCronInserted}`)
+        logger.verbose(`Collected Message by ${msg.author.username}: ${msg.content}, ${isCronInserted}`)
         if (isCronInserted === 0){
             const [hour, min] = cronMsg.split(' ')
             message.channel.send(`성공적으로 등록되었습니다. 설정한 시간: ${hour}시 ${min}분`)
@@ -114,11 +113,10 @@ function askForTime(message, userCommandStatus, conn, isAltering) {
 async function insertUserCron(discordId, userInput, conn, isAltering) {
     const [hour, minute] = userInput.split(' ');
     if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
-        console.log("Invalid User Format")
+        logger.warn(`${discordId} / Invalid User Format`)
         return -2; //알맞지 않은 날짜 형식 에러 코드
     }
     const userCron = `${hour} ${minute}`
-    console.log(userCron)
     try{
         if (!isAltering){
             await conn.execute('INSERT INTO user_cron(discord_id, cron) VALUES(?, ?)', [discordId, userCron]);
@@ -127,10 +125,10 @@ async function insertUserCron(discordId, userInput, conn, isAltering) {
         }
 
         const [rows] = await conn.execute('SELECT cron FROM user_cron WHERE discord_id = ?', [discordId])
-        console.log(`under returned rows: ${JSON.stringify(rows, null, 2)}`);
+        logger.info(`${discordId} / returned rows: ${JSON.stringify(rows, null, 2)}`);
         return 0;
     }catch (error){
-        console.log(error)
+        logger.error(`${discordId} / ${error}`)
         await conn.rollback();
         return -1; //알 수 없는 오류 발생
     }
