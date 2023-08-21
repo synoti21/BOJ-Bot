@@ -86,11 +86,15 @@ function askForTime(message, userCommandStatus, conn, isAltering) {
         const isCronInserted = await insertUserCron(message.author.id, cronMsg, conn, isAltering)
 
         console.log(`Collected Message by ${msg.author.username}: ${msg.content}, ${isCronInserted}`)
-        if (isCronInserted){
+        if (isCronInserted === 0){
             const [hour, min] = cronMsg.split(' ')
             message.channel.send(`성공적으로 등록되었습니다. 설정한 시간: ${hour}시 ${min}분`)
         }else{ //TODO 에러 코드로 분류해서 상세 오류 보내기 (잘못된 시간 형식입니다 등)
-            message.channel.send("오류가 발생했습니다.")
+            if (isCronInserted === -1){
+                message.channel.send("알 수 없는 오류가 발생했습니다.")
+            }else if (isCronInserted === -2){
+                message.reply("시간 형식이 올바르지 않습니다. 올바른 형식으로 입력해주세요. (ex. 오전 1시 1분: 01 01)")
+            }
         }
         //백준 ID를 입력했으면 아이디 콜렉터 종료
         idCollector.stop();
@@ -109,10 +113,9 @@ function askForTime(message, userCommandStatus, conn, isAltering) {
 
 async function insertUserCron(discordId, userInput, conn, isAltering) {
     const [hour, minute] = userInput.split(' ');
-
     if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
         console.log("Invalid User Format")
-        return false;
+        return -2; //알맞지 않은 날짜 형식 에러 코드
     }
     const userCron = `${hour} ${minute}`
     console.log(userCron)
@@ -125,11 +128,11 @@ async function insertUserCron(discordId, userInput, conn, isAltering) {
 
         const [rows] = await conn.execute('SELECT cron FROM user_cron WHERE discord_id = ?', [discordId])
         console.log(`under returned rows: ${JSON.stringify(rows, null, 2)}`);
-        return true;
+        return 0;
     }catch (error){
         console.log(error)
         await conn.rollback();
-        return false;
+        return -1; //알 수 없는 오류 발생
     }
 }
 
