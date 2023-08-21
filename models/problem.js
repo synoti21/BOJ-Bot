@@ -9,7 +9,6 @@ class bojProblem{
     }
     getLevel(){
         let probLevel = this.level
-        console.log(`난이도 : ${probLevel}`)
         if (1 <= probLevel && probLevel <= 5){
             return `브론즈 ${6-probLevel}`
         }else if (6 <= probLevel && probLevel <= 10){

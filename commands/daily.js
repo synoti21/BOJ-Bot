@@ -128,7 +128,7 @@ async function insertUserCron(discordId, userInput, conn, isAltering) {
         logger.info(`${discordId} / returned rows: ${JSON.stringify(rows, null, 2)}`);
         return 0;
     }catch (error){
-        logger.error(`${discordId} / ${error}`)
+        logger.error(`Error on daily func : ${error}`)
         await conn.rollback();
         return -1; //알 수 없는 오류 발생
     }
