@@ -37,6 +37,17 @@ RDS_DB=
 ### 📦 Using Docker
 For those who prefer using Docker container, follow the instruction:
 - Fill the environment variable in the Dockerfile
+```
+ENV DISCORD_TOKEN <your discord bot token>
+
+ENV RDS_ENDPOINT <your endpoint>
+
+ENV RDS_USER <your username>
+
+ENV RDS_PASSWORD <your password>
+
+ENV RDS_DB <your db name>
+```
 - Build a image and run a container
 ```
 docker build -t <image name> .
