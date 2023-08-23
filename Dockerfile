@@ -17,6 +17,8 @@ ENV RDS_USER <your username>
 ENV RDS_PASSWORD <your password>
 
 ENV RDS_DB <your db name>
+
+ENV TZ <your region timezone>
   
 EXPOSE 80
 
