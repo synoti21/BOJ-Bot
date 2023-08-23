@@ -67,7 +67,7 @@ client.on('messageCreate', message => {
     }
 });
 
-cron.schedule('* * * * *', () => sendRandomMessage(client));
+cron.schedule('1 * * * * *', () => sendRandomMessage(client));
 
 
 
