@@ -47,8 +47,10 @@ ENV RDS_USER <your username>
 ENV RDS_PASSWORD <your password>
 
 ENV RDS_DB <your db name>
+
+ENV TZ <your region timezone>
 ```
-- Build a image and run a container
+- Build an image and run a container
 ```
 docker build -t <image name> .
 docker run -d <image name>
