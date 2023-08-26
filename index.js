@@ -2,6 +2,7 @@ const {Client, GatewayIntentBits, Collection} = require('discord.js')
 const fs = require('fs');
 const { sendRandomMessage } = require('./bot/cron')
 const cron = require("node-cron");
+const logger = require("./logger")
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -67,7 +68,14 @@ client.on('messageCreate', message => {
     }
 });
 
-cron.schedule('1 * * * * *', () => sendRandomMessage(client));
+cron.schedule('* * * * *', function(){
+    logger.verbose("Running cron job")
+    sendRandomMessage(client).then(r =>
+        logger.verbose(r)
+    ).catch(error =>{
+        logger.error(error)
+    })
+});
 
 
 
