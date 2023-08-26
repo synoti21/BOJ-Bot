@@ -1,10 +1,10 @@
 const { getConnection } = require('../database/connect')
 const { getRandomProblem } = require('../commands/random')
-const {EmbedBuilder} = require("discord.js");
 const logger = require("../logger")
 async function sendRandomMessage(client) {
 
     const conn = await getConnection();
+    logger.verbose(conn)
     await conn.beginTransaction()
 
     const currentHour = new Date().getHours();
@@ -28,10 +28,12 @@ async function sendRandomMessage(client) {
             const targetUser = await client.users.fetch(user.discord_id)
             targetUser.send({embeds: [randProblemMsg]})
             logger.info(`Send Problem to user ${user.discord_id}`)
-            conn.release();
         }
+        conn.release();
+
     }catch (error){
         logger.error(`Error on cron func: ${error}`);
+        conn.release();
     }
 }
 
