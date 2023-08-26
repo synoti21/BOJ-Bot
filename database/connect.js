@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
 const dotenv = require("dotenv");
+const logger = require("../logger")
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ const pool = mysql.createPool({
     database: 'boj_bot_db',
     port: 3306,
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: 40,
     queueLimit: 0,
     connectTimeout: 4500
 });
@@ -20,7 +21,7 @@ const getConnection = async () => { //Pool 커넥션 불러오기
     try {
         return await pool.getConnection();
     } catch (error) {
-        console.error(`connection error : ${error.message}`);
+        logger.error(`connection error : ${error.message}`);
         return null;
     }
 }
