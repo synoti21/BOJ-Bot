@@ -2,17 +2,23 @@ const { getConnection } = require('../database/connect')
 const { getRandomProblem } = require('../commands/random')
 const logger = require("../logger")
 async function sendRandomMessage(client) {
+    let conn;
+    try {
+        conn = await getConnection();
+        logger.verbose(conn)
 
-    const conn = await getConnection();
-    logger.verbose(conn)
-    await conn.beginTransaction()
+        if (!conn) {
+            logger.error("Failed to get connection");
+            return;
+        }
 
-    const currentHour = new Date().getHours();
-    const currentMinute = new Date().getMinutes();
-    const currentTime = `${currentHour} ${currentMinute}`
-    logger.verbose(`Time Switched: ${currentTime}`)
+        await conn.beginTransaction()
 
-    try{
+        const currentHour = new Date().getHours();
+        const currentMinute = new Date().getMinutes();
+        const currentTime = `${currentHour} ${currentMinute}`
+        logger.verbose(`Time Switched: ${currentTime}`)
+
         const [users] = await conn.execute('SELECT discord_id FROM user_cron WHERE cron = ?',[currentTime]);
 
         if (!users || users.length === 0) {
@@ -29,12 +35,15 @@ async function sendRandomMessage(client) {
             targetUser.send({embeds: [randProblemMsg]})
             logger.info(`Send Problem to user ${user.discord_id}`)
         }
-        conn.release();
+        await conn.commit();
 
-    }catch (error){
+    }catch (error) {
         logger.error(`Error on cron func: ${error}`);
-        conn.release();
+        if (conn) await conn.rollback();
+    } finally {
+        if (conn) conn.release();
     }
+
 }
 
 module.exports = { sendRandomMessage }
