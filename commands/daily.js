@@ -112,11 +112,19 @@ function askForTime(message, userCommandStatus, conn, isAltering) {
 
 async function insertUserCron(discordId, userInput, conn, isAltering) {
     const [hour, minute] = userInput.split(' ');
-    if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
-        logger.warn(`${discordId} / Invalid User Format`)
-        return -2; //알맞지 않은 날짜 형식 에러 코드
+
+    if (hour.length !== 2 || minute.length !== 2) {
+        return -2;
     }
-    const userCron = `${hour} ${minute}`
+
+    if (isNaN(hour) || isNaN(minute) || parseInt(hour, 10) < 0 || parseInt(hour, 10) >= 24 || parseInt(minute, 10) < 0 || parseInt(minute, 10) >= 60) {
+        return -2;
+    }
+
+    const norm_hour = parseInt(hour, 10)
+    const norm_min = parseInt(minute, 10)
+
+    const userCron = `${norm_hour} ${norm_min}`
     try{
         if (!isAltering){
             await conn.execute('INSERT INTO user_cron(discord_id, cron) VALUES(?, ?)', [discordId, userCron]);
