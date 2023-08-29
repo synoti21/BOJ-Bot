@@ -6,11 +6,12 @@ const {log} = require("winston");
 const { combine, timestamp, label, printf } = winston.format;
 
 const logDir = `${process.cwd()}/logs`;
-const logLevel = process.env.NODE_ENV === "development" ? "verbose" : "info";
+const logLevel = process.env.NODE_ENV === 'development' ? 'verbose' : 'info';
 
 const logFormat = printf(({ level, message, label, timestamp }) => {
     return `${timestamp} [${label}] ${level}: ${message}`;
 });
+
 
 const transports = [
     new winstonDaily({
@@ -31,6 +32,7 @@ const transports = [
         zippedArchive: true,
     }),
 ];
+
 
 if (process.env.NODE_ENV !== 'production') {
     transports.push(

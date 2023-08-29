@@ -14,9 +14,6 @@ const client = new Client({
 });
 const config = require("./config.json")
 
-process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() === 'development' ) ? 'development' : 'production';
-
-
 client.config = config;
 client.commands = new Collection();
 
@@ -76,6 +73,5 @@ cron.schedule('* * * * *', function(){
         logger.error(error)
     })
 });
-
 
 
