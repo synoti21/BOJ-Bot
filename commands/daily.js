@@ -34,8 +34,8 @@ async function getUserCron(author, message, userCommandStatus){
             const [hour, min] = rows[0].cron.split(' ');
             message.reply(`${hour}시 ${min}분으로 알림이 설정된 상태입니다. 변경하시겠습니까? (y/n)`);
 
-            const botFilter = m => !m.author.bot && m.author.id === message.author.id && !m.content.startsWith('!');
-            const responseCollector = message.channel.createMessageCollector({filter: botFilter,max:1, time: 20000});
+            const responseFilter = m => !m.author.bot && m.author.id === message.author.id && !m.content.startsWith('!') && (m.content === 'y' || m.content === 'n');
+            const responseCollector = message.channel.createMessageCollector({filter: responseFilter,max:1, time: 20000});
 
             responseCollector.on('collect', async msg => {
                 if (msg.content === 'y'){
