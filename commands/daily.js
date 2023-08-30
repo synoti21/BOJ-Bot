@@ -55,14 +55,14 @@ async function getUserCron(author, message, userCommandStatus){
                 }
             });
 
-            conn.release();
         } else {
             askForTime(message, userCommandStatus, conn, 0);
-            conn.release();
         }
     }catch (error){
-        await conn.rollback();
+        if (conn) await conn.rollback();
         logger.error(`Error: ${error} / ${author.id}`)
+    }finally {
+        if (conn) await conn.release();
     }
 
 }
