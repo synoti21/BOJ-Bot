@@ -3,6 +3,7 @@ const fs = require('fs');
 const { sendRandomMessage } = require('./bot/cron')
 const cron = require("node-cron");
 const logger = require("./logger")
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -20,6 +21,9 @@ client.commands = new Collection();
 module.exports = client;
 
 client.login(process.env.DISCORD_TOKEN);
+
+require('./bot/welcome')
+
 
 client.once('ready', async () => {
     console.log("BOJ Bot is ready")
